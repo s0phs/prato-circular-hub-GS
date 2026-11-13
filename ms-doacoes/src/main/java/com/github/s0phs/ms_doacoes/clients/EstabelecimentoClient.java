@@ -9,4 +9,7 @@ public interface EstabelecimentoClient {
 
     @PutMapping("/api/v1/estabelecimentos/{id}/ativar")
     void ativarEstabelecimento(@PathVariable("id") Long id);
+
+    @PutMapping("/api/v1/estabelecimentos/{id}/desativar")
+    void desativarEstabelecimento(@PathVariable("id") Long id);
 }

@@ -4,6 +4,7 @@ import com.github.s0phs.ms_estabelecimentos.dto.EstabelecimentoRequestDTO;
 import com.github.s0phs.ms_estabelecimentos.dto.EstabelecimentoResponseDTO;
 import com.github.s0phs.ms_estabelecimentos.entities.Estabelecimento;
 import com.github.s0phs.ms_estabelecimentos.entities.StatusEstabelecimento;
+import com.github.s0phs.ms_estabelecimentos.exceptions.BusinessException;
 import com.github.s0phs.ms_estabelecimentos.exceptions.ResourceNotFoundException;
 import com.github.s0phs.ms_estabelecimentos.repositories.EstabelecimentoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -70,11 +71,18 @@ public class EstabelecimentoService {
     @Transactional
     public void deleteEstabelecimento(Long id) {
 
-        if (!estabelecimentoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Estabelecimento não encontrado. ID: " + id);
+        Estabelecimento estabelecimento = estabelecimentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Estabelecimento não encontrado. ID: " + id
+                ));
+
+        if (estabelecimento.getStatus() == StatusEstabelecimento.ATIVO) {
+            throw new BusinessException(
+                    "Não é possível excluir um estabelecimento ativo."
+            );
         }
 
-        estabelecimentoRepository.deleteById(id);
+        estabelecimentoRepository.delete(estabelecimento);
     }
 
     @Transactional
@@ -89,6 +97,14 @@ public class EstabelecimentoService {
         estabelecimento = estabelecimentoRepository.save(estabelecimento);
 
         return new EstabelecimentoResponseDTO(estabelecimento);
+    }
+
+    public void desativarEstabelecimento(Long id) {
+        Estabelecimento estabelecimento = estabelecimentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento não encontrado"));
+
+        estabelecimento.setStatus(StatusEstabelecimento.INATIVO);
+        estabelecimentoRepository.save(estabelecimento);
     }
 
     private void mapDtoToEstabelecimento(

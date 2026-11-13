@@ -1,5 +1,6 @@
 package com.github.s0phs.ms_doacoes.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.s0phs.ms_doacoes.entities.Doacao;
 import com.github.s0phs.ms_doacoes.entities.StatusDoacao;
 import com.github.s0phs.ms_doacoes.entities.TipoRecebedor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

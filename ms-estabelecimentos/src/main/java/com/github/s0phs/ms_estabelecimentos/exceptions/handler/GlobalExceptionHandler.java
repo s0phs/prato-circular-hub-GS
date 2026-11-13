@@ -1,6 +1,7 @@
 package com.github.s0phs.ms_estabelecimentos.exceptions.handler;
 
 
+import com.github.s0phs.ms_estabelecimentos.exceptions.BusinessException;
 import com.github.s0phs.ms_estabelecimentos.exceptions.DatabaseException;
 import com.github.s0phs.ms_estabelecimentos.exceptions.ResourceNotFoundException;
 import com.github.s0phs.ms_estabelecimentos.exceptions.dto.CustomErrorDTO;
@@ -78,12 +79,28 @@ public class GlobalExceptionHandler {
     }
 
     // 500 - fallback para qualquer erro não tratado
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<CustomErrorDTO> handleGenericException(Exception e,
-                                                                 HttpServletRequest request) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<CustomErrorDTO> handleGenericException(Exception e,
+//                                                                 HttpServletRequest request) {
+//        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
+//        CustomErrorDTO err = new CustomErrorDTO(
+//                Instant.now(), status.value(),
+//                e.getMessage(),
+//                request.getRequestURI()
+//        );
+//
+//        return ResponseEntity.status(status).body(err);
+//    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<CustomErrorDTO> businessException(
+            BusinessException e, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.CONFLICT;
+
         CustomErrorDTO err = new CustomErrorDTO(
-                Instant.now(), status.value(),
+                Instant.now(),
+                status.value(),
                 e.getMessage(),
                 request.getRequestURI()
         );

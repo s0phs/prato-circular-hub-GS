@@ -68,6 +68,12 @@ public class EstabelecimentoController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @PutMapping("/{id}/desativar")
+    public ResponseEntity<Void> desativarEstabelecimento(@PathVariable Long id) {
+        estabelecimentoService.desativarEstabelecimento(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
