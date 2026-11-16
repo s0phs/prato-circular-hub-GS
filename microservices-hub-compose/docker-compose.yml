@@ -1,0 +1,54 @@
+services:
+
+  eureka-server:
+    container_name: eureka-server
+    image: eureka-server:latest
+    ports:
+      - "8761:8761"
+    networks:
+      - microservices-net
+
+  api-gateway:
+    container_name: api-gateway
+    image: api-gateway:latest
+    ports:
+      - "8082:8082"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    networks:
+      - microservices-net
+    depends_on:
+      - eureka-server
+
+  ms_estabelecimentos:
+    container_name: ms-estabelecimentos
+    image: ms-estabelecimentos:latest
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql_prato_circular:3306/estabelecimentos?createDatabaseIfNotExist=true
+    networks:
+      - microservices-net
+    depends_on:
+      - eureka-server
+      - api-gateway
+
+  ms_doacoes:
+    container_name: ms-doacoes
+    image: ms-doacoes:latest
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql_prato_circular:3306/doacoes?createDatabaseIfNotExist=true
+    networks:
+      - microservices-net
+    depends_on:
+      - eureka-server
+      - api-gateway
+      - ms_estabelecimentos
+
+networks:
+  microservices-net:
+    external: true
