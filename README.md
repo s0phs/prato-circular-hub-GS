@@ -237,29 +237,6 @@ O **Flyway** cria as tabelas e insere dados de exemplo automaticamente na primei
 
 O Prato Circular foi dividido em microsserviços para separar as responsabilidades. Cada serviço executa sua própria aplicação Spring Boot e gerencia os dados de sua área.
 
-### 🧭 Eureka Server — descoberta dos serviços
-
-O **Eureka Server** funciona como um catálogo dos serviços disponíveis.
-
-Quando o `api-gateway`, o `ms-estabelecimentos` e o `ms-doacoes` iniciam, eles se registram no Eureka. Assim, os outros componentes podem descobrir onde cada aplicação está funcionando sem precisar configurar manualmente seu endereço IP.
-
-O painel do Eureka pode ser acessado em **[http://localhost:8761](http://localhost:8761)**.
-
-### 🚪 API Gateway — entrada única
-
-O **API Gateway** é a porta de entrada das requisições externas. Em vez de acessar cada microsserviço por uma porta diferente, o usuário utiliza a porta `8082`.
-
-O Gateway consulta as informações de descoberta do Eureka e encaminha a requisição para o serviço correspondente.
-
-**Exemplos:**
-
-| Requisição | Destino |
-|---|---|
-| `GET /ms-estabelecimentos/api/v1/estabelecimentos` | `ms-estabelecimentos` |
-| `GET /ms-doacoes/api/v1/doacoes` | `ms-doacoes` |
-
-O prefixo `/ms-estabelecimentos` ou `/ms-doacoes` identifica o serviço; o Gateway utiliza o roteamento dinâmico para encaminhar a requisição ao endpoint correto.
-
 ### 🏪 MS Estabelecimentos — gerenciamento dos doadores
 
 O **`ms-estabelecimentos`** é responsável por cadastrar, consultar, atualizar e excluir estabelecimentos.
