@@ -324,47 +324,6 @@ Esse fluxo demonstra o funcionamento integrado de **API Gateway, Eureka, OpenFei
 
 ---
 
-## 🛑 Como parar o projeto
-
-**Parar os quatro serviços Java:**
-
-```powershell
-docker compose -f microservices-hub-compose/docker-compose.yml down
-```
-
-**Parar também o MySQL:**
-
-```powershell
-docker compose -f mysql_846/docker-compose.yml down
-```
-
-Esses comandos não apagam os dados persistidos na pasta de volume do MySQL.
-
-**Para executar novamente:** inicie o MySQL (passo 4), conecte-o à rede se necessário (passo 5) e inicie os microsserviços (passo 7). Não é preciso reconstruir as imagens se o código não mudou.
-
----
-
-## 🛠️ Problemas comuns
-
-| Problema | O que verificar |
-|---|---|
-| O Docker não responde | Confirme que o Docker Desktop está aberto e totalmente iniciado. |
-| Porta ocupada | As portas `3306`, `8761` e `8082` precisam estar livres. |
-| Eureka sem serviços | Aguarde a inicialização e atualize a página. |
-| Erro `404` no Gateway | Confira se os serviços aparecem como `UP` no Eureka e tente novamente após alguns segundos. |
-| Falha de conexão com MySQL | Verifique se `mysql_prato_circular` está em execução e conectado à rede `microservices-net`. |
-| Um serviço não inicia | Consulte os logs do container para identificar o erro. |
-
-Para consultar os logs de um container, execute:
-
-```powershell
-docker logs api-gateway --tail 100
-```
-
-Substitua `api-gateway` pelo nome do container que deseja verificar.
-
----
-
 <div align="center">
 
 **Prato Circular** · Projeto acadêmico · FIAP · 2026
