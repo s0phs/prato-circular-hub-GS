@@ -89,9 +89,22 @@ public class DoacaoService {
             );
         }
 
+        Long estabelecimentoAnteriorId = doacao.getEstabelecimentoId();
+
         mapDtoToDoacao(dto, doacao);
 
         doacao = repository.save(doacao);
+
+        Long estabelecimentoNovoId = doacao.getEstabelecimentoId();
+
+        if (!estabelecimentoAnteriorId.equals(estabelecimentoNovoId)) {
+
+            estabelecimentoClient.ativarEstabelecimento(estabelecimentoNovoId);
+
+            if (!repository.existsByEstabelecimentoId(estabelecimentoAnteriorId)) {
+                estabelecimentoClient.desativarEstabelecimento(estabelecimentoAnteriorId);
+            }
+        }
 
         return new DoacaoResponseDTO(doacao);
     }
